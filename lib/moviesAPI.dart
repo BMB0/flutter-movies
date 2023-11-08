@@ -38,6 +38,7 @@ class MoviesApi {
 }
 
 class Result {
+  int ammount;
   bool adult;
   String backdropPath;
   List<int> genreIds;
@@ -68,6 +69,7 @@ class Result {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    required this.ammount,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -86,6 +88,7 @@ class Result {
         video: json["video"],
         voteAverage: json["vote_average"]?.toDouble(),
         voteCount: json["vote_count"],
+        ammount: json["ammount"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +107,7 @@ class Result {
         "video": video,
         "vote_average": voteAverage,
         "vote_count": voteCount,
+        "ammount": ammount ?? 0,
       };
 }
 

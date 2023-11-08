@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/movie_cubit.dart';
 import 'package:movies/movies.dart';
 
 void main() {
@@ -13,7 +15,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Movies(),
+      home: BlocProvider(
+        create: (_) => MovieCubit(),
+        child: Movies(),
+      ),
       routes: {
         '/movies': (context) => Movies(),
       },
