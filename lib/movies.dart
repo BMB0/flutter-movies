@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/movie_cubit.dart';
 import 'package:movies/movie_state.dart';
-import 'package:movies/moviesAPI.dart';
+import 'package:movies/moviesApi.dart';
 
 class Movies extends StatefulWidget {
   const Movies({Key? key}) : super(key: key);
@@ -14,14 +14,20 @@ class Movies extends StatefulWidget {
 
 class _MoviesState extends State<Movies> {
   final dio = Dio();
-  static const Precio = 30;
+  var movies = MoviesApi();
 
-  Future<List<Result>> getHttp() async {
+  Future<MoviesApi> getHttp() async {
     const url =
         'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=fa3e844ce31744388e07fa47c7c5d8c3';
     final response = await dio.get(url);
-    final moviesApi = moviesApiFromJson(response.toString());
-    return moviesApi.results;
+
+    if (response.data is Map<String, dynamic>) {
+      MoviesApi moviesApi = MoviesApi.fromJson(response.data);
+      print("Numero de peliculas: ${moviesApi.results!.length}");
+      return moviesApi;
+    } else {
+      throw Exception('Failed to load movies');
+    }
   }
 
   @override
@@ -31,20 +37,20 @@ class _MoviesState extends State<Movies> {
         appBar: AppBar(
           title: const Text("Movies"),
         ),
-        body: BlocBuilder<MovieCubit, int>(builder: (context, count) {
-          return FutureBuilder<List<Result>>(
+        body: BlocBuilder<MovieCubit, MovieState>(builder: (context, state) {
+          return FutureBuilder<MoviesApi>(
             future: getHttp(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
+            builder: (context, movies) {
+              if (movies.hasData) {
                 return ListView.builder(
                   padding: const EdgeInsets.all(10),
-                  itemCount: snapshot.data!.length,
+                  itemCount: movies.data?.results!.length,
                   itemBuilder: (context, index) {
-                    var movie = snapshot.data![index];
+                    Results movie = movies.data!.results![index];
                     return Row(
                       children: [
                         Expanded(
-                          child: Text(movie.title,
+                          child: Text(movie.originalTitle!,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
@@ -54,14 +60,14 @@ class _MoviesState extends State<Movies> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text('$count'),
+                              Text(movie.amount.toString()),
                               ElevatedButton(
                                   onPressed: () =>
-                                      context.read<MovieCubit>().increment(),
+                                      {movie.amount = movie.amount! + 1},
                                   child: const Text("Agregar")),
                               ElevatedButton(
                                   onPressed: () =>
-                                      context.read<MovieCubit>().decrement(),
+                                      {movie.amount = movie.amount! - 1},
                                   child: const Text("Decrementar")),
                               ElevatedButton(
                                   onPressed: () => {},
@@ -73,8 +79,8 @@ class _MoviesState extends State<Movies> {
                     );
                   },
                 );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+              } else if (movies.hasError) {
+                return Text("${movies.error}");
               }
               return const CircularProgressIndicator();
             },
