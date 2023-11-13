@@ -240,7 +240,7 @@ class CartView extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.all(5),
                           width: 200,
-                          height: 300,
+                          height: 295,
                           child: Stack(
                             children: [
                               Image.network(
@@ -282,8 +282,8 @@ class CartView extends StatelessWidget {
                                 ),
                               ),
                               Positioned(
-                                top: 250,
-                                right: 70,
+                                top: 245,
+                                right: 10,
                                 child: Material(
                                   shape: const CircleBorder(
                                     side: BorderSide(
