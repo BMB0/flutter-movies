@@ -90,70 +90,118 @@ class MoviesView extends StatelessWidget {
   }
 
   Widget _buildMovieCard(BuildContext context, Results movie) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      width: 200,
-      height: 300,
-      child: Stack(
+    return BlocBuilder<CartCubit, MovieState>(builder: (context, state) {
+      return Column(
         children: [
-          Image.network(
-            'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-            fit: BoxFit.fill,
-          ),
-          Positioned(
-            top: 0,
-            child: Container(
-              color: Colors.black54,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  movie.originalTitle!,
-                  style: const TextStyle(
-                    color: Colors.white,
+          Container(
+            margin: const EdgeInsets.all(5),
+            width: 200,
+            height: 300,
+            child: Stack(
+              children: [
+                Image.network(
+                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                  fit: BoxFit.fill,
+                ),
+                Positioned(
+                  top: 0,
+                  child: Container(
+                    color: Colors.black54,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        movie.originalTitle ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Positioned(
+                  top: 250,
+                  left: 10,
+                  child: Container(
+                    color: const Color.fromARGB(174, 0, 0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        context.read<CartCubit>().getAmount(movie).toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 250,
+                  right: 10,
+                  child: Material(
+                    shape: const CircleBorder(
+                      side: BorderSide(
+                        color: Colors.purple,
+                        width: 2,
+                      ),
+                    ),
+                    color: Color.fromARGB(237, 255, 255, 255),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.purple,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        context.read<CartCubit>().addToCart(movie);
+                      },
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 250,
+                  right: 70,
+                  child: Material(
+                    shape: const CircleBorder(
+                      side: BorderSide(
+                        color: Colors.purple,
+                        width: 2,
+                      ),
+                    ),
+                    color: Color.fromARGB(232, 255, 255, 255),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.remove,
+                        color: Colors.purple,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        context.read<CartCubit>().removeFromCart(movie);
+                      },
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          Positioned(
-            top: 250,
-            right: 10,
-            child: Material(
-              shape: const CircleBorder(),
-              color: Color.fromARGB(197, 255, 255, 255),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.purple,
-                  size: 30,
-                ),
-                onPressed: () {
-                  context.read<CartCubit>().addToCart(movie);
-                },
+          Row(
+            children: [
+              const Icon(
+                Icons.star,
+                color: Colors.yellow,
+                size: 20,
               ),
-            ),
-          ),
-          Positioned(
-            top: 250,
-            right: 150,
-            child: Material(
-              shape: const CircleBorder(),
-              color: Color.fromARGB(190, 255, 255, 255),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.remove,
-                  color: Colors.purple,
-                  size: 30,
+              Text(
+                '${movie.voteAverage}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                onPressed: () {
-                  context.read<CartCubit>().removeFromCart(movie);
-                },
               ),
-            ),
+            ],
           )
         ],
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
@@ -213,53 +261,142 @@ class CartView extends StatelessWidget {
         bloc: cartCubit,
         builder: (context, state) {
           final cart = state.movies;
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: cart.length,
-            itemBuilder: (context, index) {
-              final movie = cart[index];
-              return Container(
-                margin: const EdgeInsets.all(5),
-                width: 100,
-                height: 150,
-                child: Stack(
-                  children: [
-                    Image.network(
-                      'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                      fit: BoxFit.fill,
-                    ),
-                    Positioned(
-                      top: 0,
-                      child: Text(
-                        movie.originalTitle ?? '',
-                        style: const TextStyle(
-                          backgroundColor: Colors.black54,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 100,
-                      right: 0,
-                      child: Material(
-                        shape: const CircleBorder(),
-                        color: Color.fromARGB(190, 255, 255, 255),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.purple,
-                            size: 30,
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: cart.length,
+                  itemBuilder: (context, index) {
+                    final movie = cart[index];
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(5),
+                          width: 200,
+                          height: 300,
+                          child: Stack(
+                            children: [
+                              Image.network(
+                                'https://image.tmdb.org/t/p/w500${movie.$1.posterPath}',
+                                fit: BoxFit.fill,
+                              ),
+                              Positioned(
+                                top: 0,
+                                child: Container(
+                                  color: Colors.black54,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      movie.$1.originalTitle ?? '',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 250,
+                                left: 10,
+                                child: Container(
+                                  color: const Color.fromARGB(174, 0, 0, 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      context
+                                          .read<CartCubit>()
+                                          .getAmount(movie.$1)
+                                          .toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 250,
+                                right: 70,
+                                child: Material(
+                                  shape: const CircleBorder(
+                                    side: BorderSide(
+                                      color: Colors.purple,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  color: Color.fromARGB(232, 255, 255, 255),
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.remove,
+                                      color: Colors.purple,
+                                      size: 30,
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read<CartCubit>()
+                                          .removeFromCart(movie.$1);
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          onPressed: () {
-                            context.read<CartCubit>().removeFromCart(movie);
-                          },
+                        ),
+                        Text(
+                          'Bs. ${movie.$2 * 30}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.purple),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Resumen de la factura:',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
+                    ),
+                    ...cart.map((movie) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '${movie.$1.originalTitle}: ${movie.$2} x Bs. 30 = Bs. ${movie.$2 * 30}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Total: Bs. ${state.amount}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              );
-            },
+              )
+            ],
           );
         },
       ),
