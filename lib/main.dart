@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/login_page.dart';
+import 'package:movies/movie_cubit.dart';
 import 'package:movies/movies_page.dart';
 import 'package:movies/theme_cubit.dart';
 
@@ -24,13 +26,23 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeData>(
-      builder: (_, theme) {
-        return MaterialApp(
-          theme: theme,
-          home: const MoviesPage(),
-        );
-      },
+    return BlocProvider(
+      create: (_) => CartCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (_, theme) {
+          return MaterialApp(
+            theme: theme,
+            home: LoginView(),
+            routes: {
+              '/login': (context) => LoginView(),
+              '/movies': (context) => MoviesView(),
+              '/shoppingCart': (context) => CartView(
+                    cartCubit: context.read<CartCubit>(),
+                  ),
+            },
+          );
+        },
+      ),
     );
   }
 }

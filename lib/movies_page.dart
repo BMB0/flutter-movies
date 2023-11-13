@@ -6,37 +6,6 @@ import 'package:movies/movie_state.dart';
 import 'package:movies/moviesApi.dart';
 import 'package:movies/theme_cubit.dart';
 
-class MoviesPage extends StatelessWidget {
-  const MoviesPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CartCubit(),
-      child: Movies(),
-    );
-  }
-}
-
-class Movies extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mi Aplicación',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
-      home: MoviesView(),
-      routes: {
-        '/movies': (context) => MoviesView(),
-        '/shoppingCart': (context) => CartView(
-              cartCubit: context.read<CartCubit>(),
-            ),
-      },
-    );
-  }
-}
-
 class MoviesView extends StatelessWidget {
   const MoviesView({Key? key}) : super(key: key);
 

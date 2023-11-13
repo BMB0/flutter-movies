@@ -5,11 +5,11 @@ class ThemeCubit extends Cubit<ThemeData> {
   ThemeCubit() : super(_lightTheme);
 
   static final _lightTheme = ThemeData(
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.white,
-    ),
-    brightness: Brightness.light,
-  );
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        foregroundColor: Colors.white,
+      ),
+      brightness: Brightness.light,
+      primarySwatch: Colors.purple);
 
   static final _darkTheme = ThemeData(
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
