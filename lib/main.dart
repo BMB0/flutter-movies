@@ -8,7 +8,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
+  const AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +34,3 @@ class AppView extends StatelessWidget {
     );
   }
 }
-
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Mi Aplicación',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: BlocProvider(
-//         create: (_) => MovieCubit(),
-//         child: Movies(),
-//       ),
-//       routes: {
-//         '/movies': (context) => Movies(),
-//       },
-//     );
-//   }
-// }

@@ -1,14 +1,29 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/movie_state.dart';
+import 'package:movies/moviesApi.dart';
 
-/// Event being processed by [MoviesBloc].
-abstract class MovieEvent {}
+class CartCubit extends Cubit<MovieState> {
+  CartCubit() : super(MovieState([], 0));
+  static const price = 30;
 
-/// Notifies bloc to increment state.
-class MovieIncrementPressed extends MovieEvent {}
+  void addToCart(Results movie) {
+    final List<Results> currentCart = state.movies;
+    final int amount = state.amount;
+    currentCart.add(movie);
 
-/// Notifies bloc to decrement state.
-class MovieDecrementPressed extends MovieEvent {}
+    final int newTotalCost = amount + price;
 
-class MoviesBloc extends Cubit<int> {
-  MoviesBloc() : super(0) {}
+    emit(MovieState([...currentCart], newTotalCost));
+  }
+
+  void removeFromCart(Results movie) {
+    final List<Results> currentCart = state.movies;
+    final int amount = state.amount;
+
+    if (currentCart.contains(movie)) {
+      currentCart.remove(movie);
+      final int newTotalCost = amount - price;
+      emit(MovieState([...currentCart], newTotalCost));
+    }
+  }
 }
