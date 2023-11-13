@@ -12,10 +12,8 @@ class CartCubit extends Cubit<MovieState> {
 
     int index = currentCart.indexWhere((tuple) => tuple.$1.id == movie.id);
     if (index != -1) {
-      // Si la película ya está en el carrito, incrementa su cantidad
       currentCart[index] = (currentCart[index].$1, currentCart[index].$2 + 1);
     } else {
-      // Si la película no está en el carrito, la agrega
       currentCart.add((movie, 1));
     }
 

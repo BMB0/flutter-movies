@@ -6,7 +6,7 @@ import 'package:movies/movies_page.dart';
 import 'package:movies/theme_cubit.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
@@ -35,10 +35,8 @@ class AppView extends StatelessWidget {
             home: LoginView(),
             routes: {
               '/login': (context) => LoginView(),
-              '/movies': (context) => MoviesView(),
-              '/shoppingCart': (context) => CartView(
-                    cartCubit: context.read<CartCubit>(),
-                  ),
+              '/movies': (context) => const MoviesView(),
+              '/shoppingCart': (context) => const CartView(),
             },
           );
         },

@@ -113,7 +113,7 @@ class MoviesView extends StatelessWidget {
                         width: 2,
                       ),
                     ),
-                    color: Color.fromARGB(237, 255, 255, 255),
+                    color: const Color.fromARGB(237, 255, 255, 255),
                     child: IconButton(
                       icon: const Icon(
                         Icons.add,
@@ -136,7 +136,7 @@ class MoviesView extends StatelessWidget {
                         width: 2,
                       ),
                     ),
-                    color: Color.fromARGB(232, 255, 255, 255),
+                    color: const Color.fromARGB(232, 255, 255, 255),
                     child: IconButton(
                       icon: const Icon(
                         Icons.remove,
@@ -216,9 +216,7 @@ class MoviesView extends StatelessWidget {
 }
 
 class CartView extends StatelessWidget {
-  final CartCubit cartCubit;
-
-  const CartView({Key? key, required this.cartCubit}) : super(key: key);
+  const CartView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +225,6 @@ class CartView extends StatelessWidget {
         title: const Text('Carrito'),
       ),
       body: BlocBuilder<CartCubit, MovieState>(
-        bloc: cartCubit,
         builder: (context, state) {
           final cart = state.movies;
           return Column(
@@ -294,7 +291,8 @@ class CartView extends StatelessWidget {
                                       width: 2,
                                     ),
                                   ),
-                                  color: Color.fromARGB(232, 255, 255, 255),
+                                  color:
+                                      const Color.fromARGB(232, 255, 255, 255),
                                   child: IconButton(
                                     icon: const Icon(
                                       Icons.remove,
