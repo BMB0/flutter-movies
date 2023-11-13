@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/movie_state.dart';
-import 'package:movies/moviesApi.dart';
+import 'package:movies/movies_api.dart';
 
 class CartCubit extends Cubit<MovieState> {
   CartCubit() : super(MovieState([], 0));

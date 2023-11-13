@@ -1,4 +1,4 @@
-import 'package:movies/moviesApi.dart';
+import 'package:movies/movies_api.dart';
 
 class MovieState {
   final List<(Results, int)> movies;

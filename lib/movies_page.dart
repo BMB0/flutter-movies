@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/movie_cubit.dart';
 import 'package:movies/movie_state.dart';
-import 'package:movies/moviesApi.dart';
+import 'package:movies/movies_api.dart';
 import 'package:movies/theme_cubit.dart';
 
 class MoviesView extends StatelessWidget {
