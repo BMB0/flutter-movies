@@ -14,9 +14,6 @@ class LoginView extends StatelessWidget {
     try {
       authenticated = await _localAuth.authenticate(
         localizedReason: 'Scan your fingerprint to authenticate',
-        useErrorDialogs: true,
-        stickyAuth: true,
-        biometricOnly: true,
       );
     } catch (e) {
       debugPrint('LocalAuth Error: $e');
